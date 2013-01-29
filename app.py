@@ -3,7 +3,6 @@ from flask import Flask, request, make_response
 from urllib import urlopen
 from PIL import Image
 from StringIO import StringIO
-from collections import defaultdict
 
 app = Flask(__name__)
 app.debug = True
@@ -19,7 +18,7 @@ def filter():
         return 'pass an image as ?url='
 
 def image_response(img, op):
-    result = CONVERT[op](img)
+    result = CONVERT.get(op, dither)(img)
     out = StringIO()
     result.save(out, format='PNG')
     response = make_response(out.getvalue())
@@ -32,7 +31,10 @@ def dither(img, *args):
 def threshold(img, *args):
     return img.convert('L').point(lambda p: 255 if p > 128 else 0)
 
-CONVERT = defaultdict(dither, dither=dither, threshold=threshold)
+CONVERT = {
+    'dither': dither,
+    'threshold': threshold,
+}
 
 if __name__ == '__main__':
    # Bind to PORT if defined, otherwise default to 5000.
