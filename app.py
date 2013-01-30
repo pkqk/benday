@@ -5,7 +5,7 @@ from PIL import Image, ImageFilter
 from StringIO import StringIO
 
 app = Flask(__name__)
-app.debug = bool(os.environ['DEBUG'])
+app.debug = bool(os.environ.get('DEBUG', False))
 
 @app.route('/')
 def filter():
