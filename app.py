@@ -56,6 +56,7 @@ def equalize(img, **kwargs):
     return ImageOps.equalize(img.convert('L')).convert('1')
 
 def halftone(img, sample=10):
+    # taken from: https://github.com/philgyford/python-halftone
     im = ImageOps.autocontrast(img.convert('L'))
     sample = int(sample)
     result = Image.new('L', im.size, 255)
